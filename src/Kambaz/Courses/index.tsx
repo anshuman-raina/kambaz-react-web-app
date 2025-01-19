@@ -1,5 +1,4 @@
 import CourseNavigation from "./Navigation";
-import Modules from "./Modules";
 import Assignments from "./Assignments";
 import AssignmentEditor from "./Assignments/Editor";
 import Home from "./Home"

@@ -3,7 +3,7 @@ export default function AssignmentEditor() {
         <div id="wd-assignments-editor">
             <label htmlFor="wd-name">Assignment Name</label><br /><br />
             <input id="wd-name" defaultValue="A1 - ENV + HTML" /><br /><br />
-            <textarea id="wd-description" rows="10" defaultValue={`The assignment is available online. Submit a link to the landing page of your Web application running on Netlify. The landing page should include the following:
+            <textarea id="wd-description" defaultValue={`The assignment is available online. Submit a link to the landing page of your Web application running on Netlify. The landing page should include the following:
 - Your full name and section
 - Links to each of the lab assignments
 - Link to the Kanbas application
@@ -60,7 +60,7 @@ export default function AssignmentEditor() {
 
                     <br />
                     <tr><td></td>
-                        <td colSpan="2">
+                        <td>
                             <p>Online Entry Options</p>
                             <input type="checkbox" id="text-entry" />
                             <label htmlFor="text-entry">Text Entry</label><br />
