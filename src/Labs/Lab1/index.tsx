@@ -238,19 +238,20 @@ Your favorite books (in no particular order)
 <input type="radio" name="radio-genre" id="wd-radio-fantasy"/>
 <label htmlFor="wd-radio-fantasy">Fantasy</label> <br />
 
-<h5 id="wd-radio-buttons">Checkbox buttons</h5>
+<h5 id="wd-checkboxes">Checkboxes</h5>
+<label>Favorite movie genre:</label><br/>
 
-<input type="checkbox" name="radio-genre" id="wd-radio-comedy"/>
-<label htmlFor="wd-radio-comedy">Comedy</label><br />
+<input type="checkbox" name="check-genre" id="wd-chkbox-comedy"/>
+<label htmlFor="wd-chkbox-comedy">Comedy</label><br/>
 
-<input type="checkbox" name="radio-genre" id="wd-radio-drama"/>
-<label htmlFor="wd-radio-drama">Drama</label><br />
+<input type="checkbox" name="check-genre" id="wd-chkbox-drama"/>
+<label htmlFor="wd-chkbox-drama">Drama</label><br/>
 
-<input type="checkbox" name="radio-genre" id="wd-radio-scifi"/>
-<label htmlFor="wd-radio-scifi">Science Fiction</label><br />
+<input type="checkbox" name="check-genre" id="wd-chkbox-scifi"/>
+<label htmlFor="wd-chkbox-scifi">Science Fiction</label><br/>
 
-<input type="checkbox" name="radio-genre" id="wd-radio-fantasy"/>
-<label htmlFor="wd-radio-fantasy">Fantasy</label>
+<input type="checkbox" name="check-genre" id="wd-chkbox-fantasy"/>
+<label htmlFor="wd-chkbox-fantasy">Fantasy</label>
 
 <br />
 
