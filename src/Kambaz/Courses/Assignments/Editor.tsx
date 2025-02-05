@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { FaChevronDown, FaTimes, FaCalendarAlt } from 'react-icons/fa'; // Importing icons from react-icons
  
 export default function AssignmentEditor() {
-  const [selectedAssignTo, setSelectedAssignTo] = useState('Everyone');
+  const [selectedAssignTo] = useState('Everyone');
  
   return (
     <div id="wd-assignments-editor" className="container mt-4">
