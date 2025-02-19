@@ -242,10 +242,10 @@ export default function AssignmentEditor() {
     <hr />
     <div className="row">
       <div className="col text-end">
-        <Link to={`/Kanbas/Courses/${cid}/Assignments`}>
+        <Link to={`/Kambaz/Courses/${cid}/Assignments`}>
           <button className="btn btn-secondary me-2">Cancel</button>
         </Link>
-        <Link to={`/Kanbas/Courses/${cid}/Assignments`}>
+        <Link to={`/Kambaz/Courses/${cid}/Assignments`}>
           <button className="btn btn-danger">Save</button>
         </Link>
       </div>
