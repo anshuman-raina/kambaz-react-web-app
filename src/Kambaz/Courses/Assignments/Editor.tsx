@@ -5,7 +5,7 @@ import * as db from "../../Database"; // Importing icons from react-icons
  
 export default function AssignmentEditor() {
   const { cid, aid } = useParams(); 
-  const [selectedAssignTo, setSelectedAssignTo] = useState('Everyone');
+  const [selectedAssignTo] = useState('Everyone');
   const assignment = db.assignments.find(a => a._id === aid); 
 
   const onlineEntryOptions = assignment?.online_entry_option || [];
