@@ -1,4 +1,3 @@
-import React from "react";
 import AssignmentControl from "./AssignmentControls";
 import { BsGripVertical } from "react-icons/bs";
 import { FaBook } from 'react-icons/fa';
