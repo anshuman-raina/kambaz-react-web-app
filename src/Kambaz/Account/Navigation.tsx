@@ -3,8 +3,7 @@ import { useLocation } from "react-router";
 import { useSelector } from "react-redux";
 export default function AccountNavigation() {
   const { pathname } = useLocation();
-  const { currentUser } = useSelector((state: any) => state.accountReducer);
-  const links = currentUser ? ["Profile"] : ["Signin", "Signup"];
+  useSelector((state: any) => state.accountReducer);
   return (
     <div id="wd-account-navigation" className="wd list-group fs-5 rounded-0">
       <Link id="wd-account-signin-link" to={`/Kambaz/Account/Signin`}
