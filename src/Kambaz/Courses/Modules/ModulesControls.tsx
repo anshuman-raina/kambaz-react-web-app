@@ -58,7 +58,6 @@ export default function ModulesControls({ moduleName, setModuleName, addModule }
         </ul>
       </div>
 
-      {/* Add Module Button */}
       <button id="wd-add-module-btn" className="btn btn-sm btn-danger d-flex align-items-center"  onClick={handleShow}>
         <FaPlus className="me-2" style={{ position: "relative", bottom: "1px" }} />
         Module
