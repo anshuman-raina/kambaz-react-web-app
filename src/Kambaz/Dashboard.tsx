@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector} from "react-redux";
 import * as courseClient from "./Courses/client";
 
 export default function Dashboard({ courses, course, allCourses, setCourse, addNewCourse,
@@ -10,10 +10,10 @@ export default function Dashboard({ courses, course, allCourses, setCourse, addN
     updateCourse: () => void;fetchCourses: () => void; fetchAllCourses: () => void;
   }) {
   const { currentUser } = useSelector((state: any) => state.accountReducer);
-  const { enrollments } = useSelector((state: any) => state.enrollmentReducer);
+  // const { enrollments } = useSelector((state: any) => state.enrollmentReducer);
   const [showAllCourses, setShowAllCourses] = useState(false);
 
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   const isEnrolled = (courseId: any) => courses.find(
     (course: any) => course._id === courseId);
