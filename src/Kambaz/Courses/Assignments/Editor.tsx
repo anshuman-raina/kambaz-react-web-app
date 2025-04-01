@@ -16,6 +16,7 @@ export default function AssignmentEditor() {
   // Set up state variables with default values to avoid conditional hook calls
   const [title, setTitle] = useState('Unititled Assignment');
   const [description, setDescription] = useState('No description');
+  const [error, setError] = useState("");
   const [points, setPoints] = useState(100);
   const [dueDate, setDueDate] = useState('');
   const [availableFrom, setAvailableFrom] = useState('');
@@ -46,6 +47,21 @@ export default function AssignmentEditor() {
   const handleSave = async () => {
     const assignmentExists = assignments && assignments.find((a: any) => a._id === aid);
 
+    if (!dueDate || isNaN(new Date(dueDate).getTime())) {
+      setError("Please enter a valid Due Date.");
+      return;
+    }
+    if (!availableFrom || isNaN(new Date(availableFrom).getTime())) {
+      setError("Please enter a valid 'Available From' date.");
+      return;
+    }
+    if (!availableUntil || isNaN(new Date(availableUntil).getTime())) {
+      setError("Please enter a valid 'Available Until' date.");
+      return;
+    }
+
+    setError("");
+
     if (!assignmentExists) {
       // Create a new assignment
       const newAssignment = {
@@ -56,11 +72,11 @@ export default function AssignmentEditor() {
         points,
         due: formatDate(new Date(dueDate).toISOString()),
         not_available_until: formatDate(new Date(availableFrom).toISOString()),
-        available_until: formatDate(new Date(availableFrom).toISOString()),
+        available_until: formatDate(new Date(availableUntil).toISOString()),
       };
       console.log(newAssignment);
       if (cid) {
-        console.log("Frontend aid: ", aid); 
+        console.log("Frontend aid: ", aid);
         const assignment = await coursesClient.createAssignmentForCourse(cid, newAssignment);
         dispatch(addAssignment(assignment));
       }
@@ -86,6 +102,11 @@ export default function AssignmentEditor() {
 
   return (
     <div id="wd-assignments-editor" className="container mt-4">
+      {error && (
+        <div className="alert alert-danger" role="alert">
+          {error}
+        </div>
+      )}
       {/* Assignment Name */}
       <div className="row mb-2">
         <div className="col">

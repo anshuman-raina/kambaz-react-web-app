@@ -1,5 +1,5 @@
 import * as client from "./client";
-import React, { useEffect, useState } from "react";
+import _React, { useEffect, useState } from "react";
 import axios from "axios";
 
 const REMOTE_SERVER = import.meta.env.VITE_REMOTE_SERVER;

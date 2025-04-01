@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import _React, { useEffect, useState } from "react";
 import * as client from "./client";
 import FormControl from "react-bootstrap/esm/FormControl";
 export default function WorkingWithObjectsAsynchronously() {
