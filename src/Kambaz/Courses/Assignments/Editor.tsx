@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { addAssignment, updateAssignment } from './reducer';
 import { useSelector, useDispatch } from "react-redux";
+import * as coursesClient from "../client";
+import * as assignmentsClient from "./client";
 
 export default function AssignmentEditor() {
   const { cid, aid } = useParams();
@@ -41,14 +43,14 @@ export default function AssignmentEditor() {
   };
 
   // Handle save action
-  const handleSave = () => {
-    const assignmentExists = assignments && assignments.find((a:any) => a._id === aid);
+  const handleSave = async () => {
+    const assignmentExists = assignments && assignments.find((a: any) => a._id === aid);
 
     if (!assignmentExists) {
       // Create a new assignment
       const newAssignment = {
         _id: aid, // Existing ID or a new unique ID
-        course : cid,
+        course: cid,
         title,
         description,
         points,
@@ -57,7 +59,11 @@ export default function AssignmentEditor() {
         available_until: formatDate(new Date(availableFrom).toISOString()),
       };
       console.log(newAssignment);
-      dispatch(addAssignment(newAssignment));
+      if (cid) {
+        console.log("Frontend aid: ", aid); 
+        const assignment = await coursesClient.createAssignmentForCourse(cid, newAssignment);
+        dispatch(addAssignment(assignment));
+      }
     } else {
       // Update the existing assignment
       const updatedAssignment = {
@@ -70,6 +76,7 @@ export default function AssignmentEditor() {
         available_until: formatDate(new Date(availableFrom).toISOString()),
       };
       console.log(updatedAssignment);
+      await assignmentsClient.updateAssignment(updatedAssignment);
       dispatch(updateAssignment(updatedAssignment));
     }
     // Navigate back after save

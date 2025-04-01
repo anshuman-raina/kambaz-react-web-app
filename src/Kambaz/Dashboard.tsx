@@ -1,13 +1,13 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { enroll, unenroll } from "./enrollmentReducer";
+import * as courseClient from "./Courses/client";
 
-export default function Dashboard({ courses, course, setCourse, addNewCourse,
-  deleteCourse, updateCourse }: {
-    courses: any[]; course: any; setCourse: (course: any) => void;
+export default function Dashboard({ courses, course, allCourses, setCourse, addNewCourse,
+  deleteCourse, updateCourse, fetchCourses, fetchAllCourses }: {
+    courses: any[]; course: any;  allCourses: any; setCourse: (course: any) => void;
     addNewCourse: () => void; deleteCourse: (course: any) => void;
-    updateCourse: () => void;
+    updateCourse: () => void;fetchCourses: () => void; fetchAllCourses: () => void;
   }) {
   const { currentUser } = useSelector((state: any) => state.accountReducer);
   const { enrollments } = useSelector((state: any) => state.enrollmentReducer);
@@ -15,11 +15,24 @@ export default function Dashboard({ courses, course, setCourse, addNewCourse,
 
   const dispatch = useDispatch();
 
-  const isEnrolled = (courseId: any) => enrollments.some(
-    (enrollment: any) => enrollment.user === currentUser._id && enrollment.course === courseId
-  );
+  const isEnrolled = (courseId: any) => courses.find(
+    (course: any) => course._id === courseId);
 
-  const coursesToDisplay = showAllCourses ? courses : courses.filter((course) => isEnrolled(course._id));
+  const [coursesToDisplay, setCoursesToDisplay] = useState<any[]>([]);
+  useEffect(() => {
+    setCoursesToDisplay(showAllCourses ? allCourses : courses);
+  }, [courses, showAllCourses]);
+
+  const unenrollStudent = async (course: any) => {
+    await courseClient.unenrollStudentForCourse(course._id);
+    await fetchCourses();
+    await fetchAllCourses();
+  };
+  const enrollStudent = async (course: any) => {
+    await courseClient.enrollStudentForCourse(course._id);
+    await fetchCourses();
+    await fetchAllCourses();
+  };
 
   return (
     <div id="wd-dashboard">
@@ -93,16 +106,14 @@ export default function Dashboard({ courses, course, setCourse, addNewCourse,
                       )}
                       {showAllCourses && currentUser?.role === "STUDENT" && isEnrolled(course._id) && (
                         <>
-                          <button className="btn btn-danger float-end" onClick={() => dispatch(unenroll(
-                            { user: currentUser._id, course: course._id }))}>
+                          <button className="btn btn-danger float-end" onClick={() => unenrollStudent(course)}>
                             Unenroll
                           </button>
                         </>
                       )}
                       {showAllCourses && currentUser?.role === "STUDENT" && !isEnrolled(course._id) && (
                         <>
-                          <button className="btn btn-success float-end" onClick={() => dispatch(enroll(
-                            { user: currentUser._id, course: course._id }))}>
+                          <button className="btn btn-success float-end" onClick={() => enrollStudent(course)}>
                             Enroll
                           </button>
                         </>
