@@ -4,7 +4,9 @@ export const REMOTE_SERVER = import.meta.env.VITE_REMOTE_SERVER;
 export const USERS_API = `${REMOTE_SERVER}/api/users`;
 
 export const signin = async (credentials: any) => {
-    console.log(credentials)
+    console.log(`$VITE_REMOTE_SERVER`)
+    console.log(`${USERS_API}/signin`)
+    console.log(`${USERS_API}`)
     const response = await axiosWithCredentials.post(`${USERS_API}/signin`, credentials);
     return response.data;
 };
