@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { addAssignment, updateAssignment } from './reducer';
 import { useSelector, useDispatch } from "react-redux";
+import * as coursesClient from "../client";
+import * as assignmentsClient from "./client";
 
 export default function AssignmentEditor() {
   const { cid, aid } = useParams();
@@ -14,6 +16,7 @@ export default function AssignmentEditor() {
   // Set up state variables with default values to avoid conditional hook calls
   const [title, setTitle] = useState('Unititled Assignment');
   const [description, setDescription] = useState('No description');
+  const [error, setError] = useState("");
   const [points, setPoints] = useState(100);
   const [dueDate, setDueDate] = useState('');
   const [availableFrom, setAvailableFrom] = useState('');
@@ -41,23 +44,42 @@ export default function AssignmentEditor() {
   };
 
   // Handle save action
-  const handleSave = () => {
-    const assignmentExists = assignments && assignments.find((a:any) => a._id === aid);
+  const handleSave = async () => {
+    const assignmentExists = assignments && assignments.find((a: any) => a._id === aid);
+
+    if (!dueDate || isNaN(new Date(dueDate).getTime())) {
+      setError("Please enter a valid Due Date.");
+      return;
+    }
+    if (!availableFrom || isNaN(new Date(availableFrom).getTime())) {
+      setError("Please enter a valid 'Available From' date.");
+      return;
+    }
+    if (!availableUntil || isNaN(new Date(availableUntil).getTime())) {
+      setError("Please enter a valid 'Available Until' date.");
+      return;
+    }
+
+    setError("");
 
     if (!assignmentExists) {
       // Create a new assignment
       const newAssignment = {
         _id: aid, // Existing ID or a new unique ID
-        course : cid,
+        course: cid,
         title,
         description,
         points,
         due: formatDate(new Date(dueDate).toISOString()),
         not_available_until: formatDate(new Date(availableFrom).toISOString()),
-        available_until: formatDate(new Date(availableFrom).toISOString()),
+        available_until: formatDate(new Date(availableUntil).toISOString()),
       };
       console.log(newAssignment);
-      dispatch(addAssignment(newAssignment));
+      if (cid) {
+        console.log("Frontend aid: ", aid);
+        const assignment = await coursesClient.createAssignmentForCourse(cid, newAssignment);
+        dispatch(addAssignment(assignment));
+      }
     } else {
       // Update the existing assignment
       const updatedAssignment = {
@@ -70,6 +92,7 @@ export default function AssignmentEditor() {
         available_until: formatDate(new Date(availableFrom).toISOString()),
       };
       console.log(updatedAssignment);
+      await assignmentsClient.updateAssignment(updatedAssignment);
       dispatch(updateAssignment(updatedAssignment));
     }
     // Navigate back after save
@@ -79,6 +102,11 @@ export default function AssignmentEditor() {
 
   return (
     <div id="wd-assignments-editor" className="container mt-4">
+      {error && (
+        <div className="alert alert-danger" role="alert">
+          {error}
+        </div>
+      )}
       {/* Assignment Name */}
       <div className="row mb-2">
         <div className="col">
