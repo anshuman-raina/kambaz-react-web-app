@@ -15,6 +15,37 @@ export default function Modules() {
   const { modules } = useSelector((state: any) => state.modulesReducer);
   const dispatch = useDispatch();
 
+  const deleteModuleHandler = async (moduleId: string) => {
+    await modulesClient.deleteModule(moduleId);
+    dispatch(deleteModule(moduleId));
+  };
+
+  const updateModuleHandler = async (module: any) => {
+    await modulesClient.updateModule(module);
+    dispatch(updateModule(module));
+  };
+ 
+ 
+
+  const addModuleHandler = async () => {
+    const newModule = await coursesClient.createModuleForCourse(cid!, {
+      name: moduleName,
+      course: cid,
+    });
+    dispatch(addModule(newModule));
+    setModuleName("");
+  };
+ 
+
+  const fetchModulesForCourse = async () => {
+    const modules = await coursesClient.findModulesForCourse(cid!);
+    dispatch(setModules(modules));
+  };
+  useEffect(() => {
+    fetchModulesForCourse();
+  }, [cid]);
+ 
+
   const removeModule = async (moduleId: string) => {
     console.log("Removing module frontend:", moduleId);
     await modulesClient.deleteModule(moduleId);
@@ -45,7 +76,7 @@ export default function Modules() {
 
   return (
     <div className="flex-fill" style={{ color: 'black' }}>
-      <ModulesControls setModuleName={setModuleName} moduleName={moduleName} addModule={createModuleForCourse} /><br />
+      <ModulesControls setModuleName={setModuleName} moduleName={moduleName} addModule={addModuleHandler}  /><br />
       <ul id="wd-modules" className="list-group rounded-0">
         {modules.map((module: any) => (
           <li className="wd-module list-group-item p-0 mb-5 fs-5 border-gray">
@@ -54,15 +85,15 @@ export default function Modules() {
               {!module.editing && module.name}
               {module.editing && (
                 <input className="form-control w-50 d-inline-block"
-                  onChange={(e) => dispatch(updateModule({ ...module, name: e.target.value }))}
+                  onChange={(e) => updateModuleHandler({ ...module, name: e.target.value })}
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {
-                      saveModule({ ...module, editing: false });
+                      updateModuleHandler({ ...module, editing: false });
                     }
                   }}
                   defaultValue={module.name} />
               )} <ModuleControlButtons moduleId={module._id}
-                deleteModule={() => removeModule(module._id)}
+              deleteModule={(moduleId) => deleteModuleHandler(moduleId)}
                 editModule={(moduleId) => dispatch(editModule(moduleId))} />
             </div>
             {module.lessons && (

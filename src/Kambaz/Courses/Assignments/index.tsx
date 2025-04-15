@@ -1,4 +1,4 @@
-import _React from "react";
+import React from "react";
 import AssignmentControl from "./AssignmentControls";
 import { BsGripVertical } from "react-icons/bs";
 import { FaBook } from 'react-icons/fa';
@@ -38,7 +38,7 @@ export default function Assignments() {
             <AssignmentControl />
             <div className="wd-assignments-title p-3 ps-2 bg-secondary" style={{ color: 'black', border: '1px solid black' }}>
                 <BsGripVertical className="me-2 fs-3" /> <GoTriangleDown />
-                <strong>ASSIGNMENTS</strong><AssignmentControlButtons /></div>
+                <strong>ASSIGNMENTS</strong><AssignmentControlButtons/></div>
             <ul className="wd-assignments-list list-group rounded-0">
                 {assignments.map((assignment: any) => (
                     <li key={assignment._id} className="wd-assignment-list-item list-group-item d-flex align-items-center" style={{ border: '1px solid black', color: 'black' }}>

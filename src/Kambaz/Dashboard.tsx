@@ -1,14 +1,16 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { useSelector} from "react-redux";
+import { useSelector } from "react-redux";
 import * as courseClient from "./Courses/client";
 
 export default function Dashboard({ courses, course, allCourses, setCourse, addNewCourse,
-  deleteCourse, updateCourse, fetchCourses, fetchAllCourses }: {
-    courses: any[]; course: any;  allCourses: any; setCourse: (course: any) => void;
+  deleteCourse, updateCourse, fetchCourses, fetchAllCourses, enrolling, setEnrolling, updateEnrollment  }: {
+    courses: any[]; course: any; allCourses: any; setCourse: (course: any) => void;
     addNewCourse: () => void; deleteCourse: (course: any) => void;
-    updateCourse: () => void;fetchCourses: () => void; fetchAllCourses: () => void;
-  }) {
+    updateCourse: () => void; fetchCourses: () => void; fetchAllCourses: () => void;
+    enrolling: boolean; setEnrolling: (enrolling: boolean) => void
+    updateEnrollment: (courseId: string, enrolled: boolean) => void }
+  ) {
   const { currentUser } = useSelector((state: any) => state.accountReducer);
   // const { enrollments } = useSelector((state: any) => state.enrollmentReducer);
   const [showAllCourses, setShowAllCourses] = useState(false);
@@ -36,7 +38,12 @@ export default function Dashboard({ courses, course, allCourses, setCourse, addN
 
   return (
     <div id="wd-dashboard">
-      <h1 id="wd-dashboard-title">Dashboard</h1> <hr />
+      <h1 id="wd-dashboard-title">Dashboard
+        <button onClick={() => setEnrolling(!enrolling)} className="float-end btn btn-primary" >
+          {enrolling ? "My Courses" : "All Courses"}
+        </button>
+
+      </h1> <hr />
       {currentUser.role === "FACULTY" && (
         <h5>New Course
           <button className="btn btn-primary float-end"
@@ -80,6 +87,15 @@ export default function Dashboard({ courses, course, allCourses, setCourse, addN
                       <Link to={`/Kambaz/Courses/${course._id}/Home`}
                         className="wd-dashboard-course-link text-decoration-none text-dark" >
                         <h5 className="wd-dashboard-course-title card-title">
+                          {enrolling && (
+                            <button  onClick={(event) => {
+                              event.preventDefault();
+                              updateEnrollment(course._id, !course.enrolled);
+                            }} className={`btn ${course.enrolled ? "btn-danger" : "btn-success"} float-end`} >
+                              {course.enrolled ? "Unenroll" : "Enroll"}
+                            </button>
+                          )}
+
                           {course.name} </h5>
                         <p className="wd-dashboard-course-title card-text overflow-y-hidden" style={{ maxHeight: 100 }}>
                           {course.description} </p>

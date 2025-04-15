@@ -18,11 +18,30 @@ export default function Kambaz() {
     startDate: "2023-09-10", endDate: "2023-12-15", description: "New Description",
   });
 
+  
+  const [enrolling, setEnrolling] = useState<boolean>(false);
   const [courses, setCourses] = useState<any[]>([]);
   const [allCourses, setAllCourses] = useState<any[]>([]);
 
   const { currentUser } = useSelector((state: any) => state.accountReducer);
-
+  
+  const updateEnrollment = async (courseId: string, enrolled: boolean) => {
+    if (enrolled) {
+      await userClient.enrollIntoCourse(currentUser._id, courseId);
+    } else {
+      await userClient.unenrollFromCourse(currentUser._id, courseId);
+    }
+    setCourses(
+      courses.map((course) => {
+        if (course._id === courseId) {
+          return { ...course, enrolled: enrolled };
+        } else {
+          return course;
+        }
+      })
+    );
+  };
+ 
   const fetchCourses = async () => {
     try {
       const courses = await userClient.findMyCourses();
@@ -42,13 +61,11 @@ export default function Kambaz() {
   }, [currentUser]);
 
   const addNewCourse = async () => {
-    console.log("index.js addNewCourse:", courses);
-    const newCourse = await userClient.createCourse(course);
+    const newCourse = await courseClient.createCourse(course);
     setCourses((courses) => [...courses, newCourse]);
-    console.log("courses after adding:", courses);
   };
   const deleteCourse = async (courseId: any) => {
-    await courseClient.deleteCourse(courseId);
+    const status = await courseClient.deleteCourse(courseId);
     setCourses(courses.filter((course) => course._id !== courseId));
   };
   const updateCourse = async () => {
@@ -84,6 +101,8 @@ export default function Kambaz() {
                   updateCourse={updateCourse}
                   fetchCourses={fetchCourses}
                   fetchAllCourses={fetchAllCourses}
+                  updateEnrollment={updateEnrollment}
+                  enrolling={enrolling} setEnrolling={setEnrolling}
                    />
               </ProtectedRoute>
             } />
