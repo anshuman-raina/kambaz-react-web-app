@@ -6,7 +6,7 @@ import FormControl from "react-bootstrap/esm/FormControl";
 import { FaPlus } from "react-icons/fa";
 export default function Users() {
  const [users, setUsers] = useState<any[]>([]);
- const [name, setName] = useState("");
+ const [_name, setName] = useState("");
 
  const createUser = async () => {
   const user = await client.createUser({
