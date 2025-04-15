@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { useLocation } from "react-router";
 import { useSelector } from "react-redux";
 export default function AccountNavigation() {
+  const { currentUser } = useSelector((state: any) => state.accountReducer);
   const { pathname } = useLocation();
   useSelector((state: any) => state.accountReducer);
   return (
@@ -12,6 +13,10 @@ export default function AccountNavigation() {
         className={`list-group-item border border-0 ${pathname.includes("Signup") ? "active" : "text-danger"}`}>Signup</Link>
       <Link id="wd-account-profile-link" to={`/Kambaz/Account/Profile`}
         className={`list-group-item border border-0 ${pathname.includes("Profile") ? "active" : "text-danger"}`}>Profile</Link>
+         {currentUser && currentUser.role === "ADMIN" && (
+        <Link id="wd-account-users-link" to={`/Kambaz/Account/Users`}
+          className={`list-group-item border border-0 ${pathname.includes("Users") ? "active" : "text-danger"}`}> Users </Link>)}
+        
     </div>
   );
 }
